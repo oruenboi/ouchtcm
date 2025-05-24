@@ -320,3 +320,10 @@ const FiveElementsCycle: React.FC = () => {
               Show Control Cycle
             </button>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default FiveElementsCycle;
