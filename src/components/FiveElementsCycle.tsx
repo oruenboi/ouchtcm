@@ -1,3 +1,5 @@
+// src/components/FiveElementsCycle.tsx
+
 import React, { useState, useMemo, useRef } from 'react';
 
 interface ElementData {
@@ -121,7 +123,7 @@ const FiveElementsCycle: React.FC = () => {
   const [activeCycle, setActiveCycle]   = useState<'generation' | 'control' | null>(null);
   const [isAnimating, setIsAnimating]   = useState(false);
 
-  // Calculate which relationships to highlight
+  // Determine which relationships to highlight
   const activeRelationships = useMemo(() => {
     if (activeCycle) {
       return relationships[activeCycle];
@@ -129,7 +131,7 @@ const FiveElementsCycle: React.FC = () => {
     if (activeElement) {
       return [
         ...relationships.generation.filter(r => r.from === activeElement || r.to === activeElement),
-        ...relationships.control   .filter(r => r.from === activeElement || r.to === activeElement)
+        ...relationships.control   .filter(r => r.from === activeElement || r.to === activeElement),
       ];
     }
     return [];
@@ -147,26 +149,26 @@ const FiveElementsCycle: React.FC = () => {
     return null;
   };
 
-  // Handle user clicking an element node
+  // Handle clicking on an element
   const handleElementClick = (id: string) => {
     if (isAnimating) return;
-    setActiveElement(prev => (prev === id ? null : id));
+    setActiveElement(prev => prev === id ? null : id);
     setActiveCycle(null);
   };
 
-  // Animate through a full cycle
+  // Animate through full cycle
   const demonstrateCycle = (cycle: 'generation' | 'control') => {
     if (isAnimating) return;
     setIsAnimating(true);
     setActiveCycle(cycle);
     setActiveElement(null);
 
-    const seq = relationships[cycle];
+    const sequence = relationships[cycle];
     let idx = 0;
     const iv = setInterval(() => {
-      if (idx < seq.length) {
-        setActiveElement(seq[idx].from);
-        idx += 1;
+      if (idx < sequence.length) {
+        setActiveElement(sequence[idx].from);
+        idx++;
       } else {
         clearInterval(iv);
         setTimeout(() => {
@@ -180,14 +182,13 @@ const FiveElementsCycle: React.FC = () => {
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6 mb-10">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">
-        Five Elements Cycle
-      </h2>
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">Five Elements Cycle</h2>
 
       <div className="flex flex-col md:flex-row gap-6">
-        {/* Left: Interactive Diagram */}
+        {/* Diagram Column */}
         <div className="w-full md:w-3/5">
-          <div className="relative aspect-square mx-auto max-w-md">
+          {/* Fallback square container */}
+          <div className="relative w-full max-w-md mx-auto h-0 pb-[100%]">
             <svg className="absolute inset-0 w-full h-full pointer-events-none">
               <defs>
                 <marker
@@ -202,7 +203,7 @@ const FiveElementsCycle: React.FC = () => {
                 </marker>
               </defs>
 
-              {/* Generation cycle (outer pentagon) */}
+              {/* Generation (outer pentagon) */}
               <path
                 d="M 50,15 L 85,35 L 75,85 L 25,85 L 15,35 Z"
                 fill="none"
@@ -215,7 +216,7 @@ const FiveElementsCycle: React.FC = () => {
                 vectorEffect="non-scaling-stroke"
               />
 
-              {/* Control cycle (inner star) */}
+              {/* Control (inner star) */}
               <path
                 d="M 50,15 L 75,85 L 15,35 L 85,35 L 25,85 Z"
                 fill="none"
@@ -278,7 +279,7 @@ const FiveElementsCycle: React.FC = () => {
             ))}
           </div>
 
-          {/* Cycle control buttons */}
+          {/* Cycle controls */}
           <div className="flex justify-center mt-6 space-x-4">
             <button
               onClick={() => demonstrateCycle('generation')}
@@ -305,16 +306,14 @@ const FiveElementsCycle: React.FC = () => {
           </div>
         </div>
 
-        {/* Right: Element Details */}
-        <div className="w-full md:w-2/5">
+        {/* Details Column */}
+        <div className="w-full md→ w-2/5">
           {activeElement ? (
             elements
               .filter(e => e.id === activeElement)
               .map(el => (
                 <div key={el.id} className={classNames('p-4 rounded-lg h-full border animate-fadeIn', el.borderColor)}>
-                  <h3 className={classNames('text-lg font-semibold', el.textColor)}>
-                    {el.name} Element
-                  </h3>
+                  <h3 className={classNames('text-lg font-semibold', el.textColor)}>{el.name} Element</h3>
                   <p className="text-sm text-gray-600">{el.chineseName}</p>
 
                   <div className="mt-4 space-y-2 text-gray-800">
@@ -330,9 +329,7 @@ const FiveElementsCycle: React.FC = () => {
                       {relationships.generation
                         .filter(r => r.from === el.id || r.to === el.id)
                         .map((r, i) => {
-                          const other = elements.find(o =>
-                            o.id === (r.from === el.id ? r.to : r.from)
-                          )!;
+                          const other = elements.find(o => o.id === (r.from === el.id ? r.to : r.from))!;
                           const isFrom = r.from === el.id;
                           return (
                             <li key={`gen-${i}`} className="flex items-center">
@@ -343,14 +340,11 @@ const FiveElementsCycle: React.FC = () => {
                               }
                             </li>
                           );
-                        })
-                      }
+                        })}
                       {relationships.control
                         .filter(r => r.from === el.id || r.to === el.id)
                         .map((r, i) => {
-                          const other = elements.find(o =>
-                            o.id === (r.from === el.id ? r.to : r.from)
-                          )!;
+                          const other = elements.find(o => o.id === (r.from === el.id ? r.to : r.from))!;
                           const isFrom = r.from === el.id;
                           return (
                             <li key={`con-${i}`} className="flex items-center">
@@ -361,8 +355,7 @@ const FiveElementsCycle: React.FC = () => {
                               }
                             </li>
                           );
-                        })
-                      }
+                        })}
                     </ul>
                   </div>
                 </div>
@@ -373,15 +366,13 @@ const FiveElementsCycle: React.FC = () => {
               <p className="text-gray-700 mb-4">
                 The Five Elements theory describes how energy flows through nature and the human body, with each element representing different aspects of health and life.
               </p>
-
               <h4 className="font-medium text-gray-900 mb-2">Cycles of Relationship:</h4>
               <ul className="list-disc pl-5 space-y-1 text-gray-700 text-sm">
                 <li><strong>Generation Cycle:</strong> Each element nourishes the next in a nurturing sequence.</li>
                 <li><strong>Control Cycle:</strong> Each element keeps another in check, maintaining balance.</li>
               </ul>
-
               <p className="text-gray-700 mt-4 text-sm italic">
-                Click on any element in the diagram to learn about its properties and relationships, or use the buttons above to visualise the different cycles.
+                Click on any element above to learn its properties, or tap the buttons to visualise each cycle.
               </p>
             </div>
           )}
