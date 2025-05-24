@@ -1,5 +1,9 @@
 import React, { useState, useMemo, useRef } from 'react';
-import clsx from 'clsx';
+
+// Helper function to replace clsx
+function classNames(...classes: (string | false | null | undefined)[]) {
+  return classes.filter(Boolean).join(' ');
+}
 
 interface ElementData {
   id: string;
@@ -210,7 +214,7 @@ const FiveElementsCycle: React.FC = () => {
                 fill="none"
                 stroke="#4B5563"
                 strokeWidth="1"
-                className={clsx(
+                className={classNames(
                   'transition-opacity duration-300',
                   activeCycle === 'control'
                     ? 'opacity-20'
@@ -226,7 +230,7 @@ const FiveElementsCycle: React.FC = () => {
                 stroke="#9333EA"
                 strokeWidth="1"
                 strokeDasharray="5,5"
-                className={clsx(
+                className={classNames(
                   'transition-opacity duration-300',
                   activeCycle === 'generation'
                     ? 'opacity-20'
@@ -260,7 +264,7 @@ const FiveElementsCycle: React.FC = () => {
                     y2={y2}
                     strokeWidth="2"
                     markerEnd="url(#arrowhead)"
-                    className={clsx(strokeClass, 'transition-opacity duration-300')}
+                    className={classNames(strokeClass, 'transition-opacity duration-300')}
                   />
                 );
               })}
@@ -275,7 +279,7 @@ const FiveElementsCycle: React.FC = () => {
                 aria-label={`${el.name} element, click for details`}
                 onClick={() => handleElementClick(el.id)}
                 onKeyPress={e => { if (e.key === 'Enter') handleElementClick(el.id); }}
-                className={clsx(
+                className={classNames(
                   'absolute w-16 h-16 rounded-full transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300 flex items-center justify-center text-white cursor-pointer',
                   el.color,
                   el.hoverColor,
@@ -296,7 +300,7 @@ const FiveElementsCycle: React.FC = () => {
             <button
               onClick={() => demonstrateCycle('generation')}
               disabled={isAnimating}
-              className={clsx(
+              className={classNames(
                 'px-4 py-2 rounded-md text-sm font-medium',
                 activeCycle === 'generation'
                   ? 'bg-gray-700 text-white'
@@ -309,7 +313,7 @@ const FiveElementsCycle: React.FC = () => {
             <button
               onClick={() => demonstrateCycle('control')}
               disabled={isAnimating}
-              className={clsx(
+              className={classNames(
                 'px-4 py-2 rounded-md text-sm font-medium',
                 activeCycle === 'control'
                   ? 'bg-purple-700 text-white'
