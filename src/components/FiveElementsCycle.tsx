@@ -1,10 +1,5 @@
 import React, { useState, useMemo, useRef } from 'react';
 
-// Helper function to replace clsx
-function classNames(...classes: (string | false | null | undefined)[]) {
-  return classes.filter(Boolean).join(' ');
-}
-
 interface ElementData {
   id: string;
   name: string;
@@ -13,12 +8,17 @@ interface ElementData {
   hoverColor: string;
   borderColor: string;
   textColor: string;
-  x: number;    // percentage as fractional (0…1)
-  y: number;    // percentage as fractional (0…1)
+  x: number;    // fractional position (0…1)
+  y: number;    // fractional position (0…1)
   organ: string;
   trait: string;
   emotion: string;
   season: string;
+}
+
+// Tiny helper to conditionally join classes
+function classNames(...classes: (string | false | null | undefined)[]) {
+  return classes.filter(Boolean).join(' ');
 }
 
 const elements: ElementData[] = [
@@ -102,7 +102,7 @@ const elements: ElementData[] = [
 const relationships = {
   generation: [
     { from: 'water', to: 'wood', label: 'Water nourishes Wood' },
-    { from: 'wood', to: 'fire',  label: 'Wood feeds Fire' },
+    { from: 'wood',  to: 'fire', label: 'Wood feeds Fire' },
     { from: 'fire',  to: 'earth', label: 'Fire creates Earth (ash)' },
     { from: 'earth', to: 'metal', label: 'Earth produces Metal' },
     { from: 'metal', to: 'water', label: 'Metal collects Water' },
@@ -113,16 +113,15 @@ const relationships = {
     { from: 'water', to: 'fire',  label: 'Water controls Fire' },
     { from: 'fire',  to: 'metal', label: 'Fire controls Metal (melts)' },
     { from: 'metal', to: 'wood',  label: 'Metal controls Wood (cuts)' },
-  ]
+  ],
 };
 
 const FiveElementsCycle: React.FC = () => {
   const [activeElement, setActiveElement] = useState<string | null>(null);
   const [activeCycle, setActiveCycle]   = useState<'generation' | 'control' | null>(null);
   const [isAnimating, setIsAnimating]   = useState(false);
-  const cycleRef = useRef<HTMLDivElement>(null);
 
-  // Compute active relationships via useMemo for performance
+  // Calculate which relationships to highlight
   const activeRelationships = useMemo(() => {
     if (activeCycle) {
       return relationships[activeCycle];
@@ -148,23 +147,25 @@ const FiveElementsCycle: React.FC = () => {
     return null;
   };
 
+  // Handle user clicking an element node
   const handleElementClick = (id: string) => {
     if (isAnimating) return;
-    setActiveElement(prev => prev === id ? null : id);
+    setActiveElement(prev => (prev === id ? null : id));
     setActiveCycle(null);
   };
 
+  // Animate through a full cycle
   const demonstrateCycle = (cycle: 'generation' | 'control') => {
     if (isAnimating) return;
     setIsAnimating(true);
     setActiveCycle(cycle);
     setActiveElement(null);
-    const sequence = relationships[cycle];
-    let idx = 0;
 
+    const seq = relationships[cycle];
+    let idx = 0;
     const iv = setInterval(() => {
-      if (idx < sequence.length) {
-        setActiveElement(sequence[idx].from);
+      if (idx < seq.length) {
+        setActiveElement(seq[idx].from);
         idx += 1;
       } else {
         clearInterval(iv);
@@ -184,13 +185,9 @@ const FiveElementsCycle: React.FC = () => {
       </h2>
 
       <div className="flex flex-col md:flex-row gap-6">
-        {/* Diagram */}
+        {/* Left: Interactive Diagram */}
         <div className="w-full md:w-3/5">
-          <div
-            className="relative aspect-square mx-auto max-w-md"
-            ref={cycleRef}
-          >
-            {/* Static pentagon & star shapes */}
+          <div className="relative aspect-square mx-auto max-w-md">
             <svg className="absolute inset-0 w-full h-full pointer-events-none">
               <defs>
                 <marker
@@ -201,14 +198,11 @@ const FiveElementsCycle: React.FC = () => {
                   refY="3.5"
                   orient="auto"
                 >
-                  <polygon
-                    points="0 0, 10 3.5, 0 7"
-                    className="fill-current stroke-current"
-                  />
+                  <polygon points="0 0, 10 3.5, 0 7" className="fill-current stroke-current" />
                 </marker>
               </defs>
 
-              {/* Generation (outer pentagon) */}
+              {/* Generation cycle (outer pentagon) */}
               <path
                 d="M 50,15 L 85,35 L 75,85 L 25,85 L 15,35 Z"
                 fill="none"
@@ -216,14 +210,12 @@ const FiveElementsCycle: React.FC = () => {
                 strokeWidth="1"
                 className={classNames(
                   'transition-opacity duration-300',
-                  activeCycle === 'control'
-                    ? 'opacity-20'
-                    : 'opacity-70'
+                  activeCycle === 'control' ? 'opacity-20' : 'opacity-70'
                 )}
                 vectorEffect="non-scaling-stroke"
               />
 
-              {/* Control (inner star) */}
+              {/* Control cycle (inner star) */}
               <path
                 d="M 50,15 L 75,85 L 15,35 L 85,35 L 25,85 Z"
                 fill="none"
@@ -232,23 +224,17 @@ const FiveElementsCycle: React.FC = () => {
                 strokeDasharray="5,5"
                 className={classNames(
                   'transition-opacity duration-300',
-                  activeCycle === 'generation'
-                    ? 'opacity-20'
-                    : 'opacity-70'
+                  activeCycle === 'generation' ? 'opacity-20' : 'opacity-70'
                 )}
                 vectorEffect="non-scaling-stroke"
               />
 
-              {/* Active relationship arrows */}
+              {/* Highlighted arrows */}
               {activeRelationships.map(rel => {
                 const from = elements.find(e => e.id === rel.from)!;
                 const to   = elements.find(e => e.id === rel.to)!;
-
-                const x1 = from.x * 100;
-                const y1 = from.y * 100;
-                const x2 = to.x   * 100;
-                const y2 = to.y   * 100;
-
+                const x1 = from.x * 100, y1 = from.y * 100;
+                const x2 = to.x   * 100, y2 = to.y   * 100;
                 const type = getRelationshipType(rel.from, rel.to);
                 const strokeClass =
                   type === 'generation'
@@ -258,10 +244,7 @@ const FiveElementsCycle: React.FC = () => {
                 return (
                   <line
                     key={`${rel.from}-${rel.to}`}
-                    x1={x1}
-                    y1={y1}
-                    x2={x2}
-                    y2={y2}
+                    x1={x1} y1={y1} x2={x2} y2={y2}
                     strokeWidth="2"
                     markerEnd="url(#arrowhead)"
                     className={classNames(strokeClass, 'transition-opacity duration-300')}
@@ -295,16 +278,14 @@ const FiveElementsCycle: React.FC = () => {
             ))}
           </div>
 
-          {/* Cycle controls */}
+          {/* Cycle control buttons */}
           <div className="flex justify-center mt-6 space-x-4">
             <button
               onClick={() => demonstrateCycle('generation')}
               disabled={isAnimating}
               className={classNames(
                 'px-4 py-2 rounded-md text-sm font-medium',
-                activeCycle === 'generation'
-                  ? 'bg-gray-700 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300',
+                activeCycle === 'generation' ? 'bg-gray-700 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300',
                 isAnimating && 'opacity-50 cursor-not-allowed'
               )}
             >
@@ -315,15 +296,95 @@ const FiveElementsCycle: React.FC = () => {
               disabled={isAnimating}
               className={classNames(
                 'px-4 py-2 rounded-md text-sm font-medium',
-                activeCycle === 'control'
-                  ? 'bg-purple-700 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300',
+                activeCycle === 'control' ? 'bg-purple-700 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300',
                 isAnimating && 'opacity-50 cursor-not-allowed'
               )}
             >
               Show Control Cycle
             </button>
           </div>
+        </div>
+
+        {/* Right: Element Details */}
+        <div className="w-full md:w-2/5">
+          {activeElement ? (
+            elements
+              .filter(e => e.id === activeElement)
+              .map(el => (
+                <div key={el.id} className={classNames('p-4 rounded-lg h-full border animate-fadeIn', el.borderColor)}>
+                  <h3 className={classNames('text-lg font-semibold', el.textColor)}>
+                    {el.name} Element
+                  </h3>
+                  <p className="text-sm text-gray-600">{el.chineseName}</p>
+
+                  <div className="mt-4 space-y-2 text-gray-800">
+                    <div><strong>Organ:</strong> {el.organ}</div>
+                    <div><strong>Trait:</strong> {el.trait}</div>
+                    <div><strong>Emotion:</strong> {el.emotion}</div>
+                    <div><strong>Season:</strong> {el.season}</div>
+                  </div>
+
+                  <div className="mt-6">
+                    <h4 className="font-medium mb-2">Active Relationships:</h4>
+                    <ul className="text-sm space-y-2">
+                      {relationships.generation
+                        .filter(r => r.from === el.id || r.to === el.id)
+                        .map((r, i) => {
+                          const other = elements.find(o =>
+                            o.id === (r.from === el.id ? r.to : r.from)
+                          )!;
+                          const isFrom = r.from === el.id;
+                          return (
+                            <li key={`gen-${i}`} className="flex items-center">
+                              <span className={classNames('w-3 h-3 rounded-full mr-2', other.color)} />
+                              {isFrom
+                                ? <><strong className={el.textColor}>{el.name}</strong> nourishes <strong className={other.textColor}>{other.name}</strong></>
+                                : <><strong className={other.textColor}>{other.name}</strong> nourishes <strong className={el.textColor}>{el.name}</strong></>
+                              }
+                            </li>
+                          );
+                        })
+                      }
+                      {relationships.control
+                        .filter(r => r.from === el.id || r.to === el.id)
+                        .map((r, i) => {
+                          const other = elements.find(o =>
+                            o.id === (r.from === el.id ? r.to : r.from)
+                          )!;
+                          const isFrom = r.from === el.id;
+                          return (
+                            <li key={`con-${i}`} className="flex items-center">
+                              <span className={classNames('w-3 h-3 rounded-full mr-2', other.color)} />
+                              {isFrom
+                                ? <><strong className={el.textColor}>{el.name}</strong> controls <strong className={other.textColor}>{other.name}</strong></>
+                                : <><strong className={other.textColor}>{other.name}</strong> controls <strong className={el.textColor}>{el.name}</strong></>
+                              }
+                            </li>
+                          );
+                        })
+                      }
+                    </ul>
+                  </div>
+                </div>
+              ))
+          ) : (
+            <div className="p-4 bg-gray-50 rounded-lg h-full animate-fadeIn">
+              <h3 className="font-semibold text-gray-900 mb-2">The Five Elements Theory</h3>
+              <p className="text-gray-700 mb-4">
+                The Five Elements theory describes how energy flows through nature and the human body, with each element representing different aspects of health and life.
+              </p>
+
+              <h4 className="font-medium text-gray-900 mb-2">Cycles of Relationship:</h4>
+              <ul className="list-disc pl-5 space-y-1 text-gray-700 text-sm">
+                <li><strong>Generation Cycle:</strong> Each element nourishes the next in a nurturing sequence.</li>
+                <li><strong>Control Cycle:</strong> Each element keeps another in check, maintaining balance.</li>
+              </ul>
+
+              <p className="text-gray-700 mt-4 text-sm italic">
+                Click on any element in the diagram to learn about its properties and relationships, or use the buttons above to visualise the different cycles.
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
