@@ -4,6 +4,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { Check, ExternalLink, Info, ArrowRight, ArrowDown } from 'lucide-react';
 import FiveElementsCycle from './FiveElementsCycle';
 import OrganSystemMap from './OrganSystemMap';
+import { ErrorBoundary } from './ErrorBoundary';
 
 // TCM elements data
 const elementsData = [
@@ -387,10 +388,14 @@ const TcmElementsPage: React.FC = () => {
         </div>
         
         {/* Five Elements Cycle Visualization */}
-        <FiveElementsCycle />
+        <ErrorBoundary fallback="Unable to load the Five Elements diagram. Please try refreshing the page.">
+          <FiveElementsCycle />
+        </ErrorBoundary>
         
         {/* Organ System Map */}
-        <OrganSystemMap />
+        <ErrorBoundary fallback="Unable to load the Organ System Map. Please try refreshing the page.">
+          <OrganSystemMap />
+        </ErrorBoundary>
         
         {/* Symptom Selector */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-10">
