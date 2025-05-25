@@ -10,7 +10,6 @@ const OrganSystemMap: React.FC = () => {
       name: 'Liver',
       element: 'Wood',
       elementColor: 'text-green-600',
-      position: 'top-[40%] right-[35%]',
       color: 'bg-green-100',
       borderColor: 'border-green-600',
       textColor: 'text-green-800',
@@ -36,7 +35,6 @@ const OrganSystemMap: React.FC = () => {
       name: 'Heart',
       element: 'Fire',
       elementColor: 'text-red-600',
-      position: 'top-[30%] right-[45%]',
       color: 'bg-red-100',
       borderColor: 'border-red-600',
       textColor: 'text-red-800',
@@ -62,7 +60,6 @@ const OrganSystemMap: React.FC = () => {
       name: 'Spleen',
       element: 'Earth',
       elementColor: 'text-yellow-600',
-      position: 'top-[50%] left-[38%]',
       color: 'bg-yellow-100',
       borderColor: 'border-yellow-600',
       textColor: 'text-yellow-800',
@@ -88,7 +85,6 @@ const OrganSystemMap: React.FC = () => {
       name: 'Lung',
       element: 'Metal',
       elementColor: 'text-gray-600',
-      position: 'top-[25%] left-[45%]',
       color: 'bg-gray-100',
       borderColor: 'border-gray-600',
       textColor: 'text-gray-800',
@@ -114,7 +110,6 @@ const OrganSystemMap: React.FC = () => {
       name: 'Kidney',
       element: 'Water',
       elementColor: 'text-blue-600',
-      position: 'top-[65%] right-[45%]',
       color: 'bg-blue-100',
       borderColor: 'border-blue-600',
       textColor: 'text-blue-800',
@@ -137,7 +132,7 @@ const OrganSystemMap: React.FC = () => {
     }
   ];
 
-  // Human body outline path for SVG
+  // Your human‐body outline as SVG path:
   const bodyOutline = "M50,5 C40,5 30,15 30,25 C30,35 35,40 35,45 L35,60 L30,90 L35,110 L40,125 L45,130 L55,130 L60,125 L65,110 L70,90 L65,60 L65,45 C65,40 70,35 70,25 C70,15 60,5 50,5 Z";
   
   return (
@@ -145,181 +140,197 @@ const OrganSystemMap: React.FC = () => {
       <h2 className="text-2xl font-bold text-primary mb-6">Organ Systems in TCM</h2>
       
       <div className="flex flex-col md:flex-row gap-6">
-        {/* Human body outline with organs */}
+        {/* ─── SVG & Organs ─── */}
         <div className="w-full md:w-2/5">
-          <div className="relative mx-auto max-w-sm h-[500px]">
-            <svg viewBox="0 0 100 140" className="w-full h-full">
-              {/* Human body outline */}
-              <path d={bodyOutline} fill="#f5f5f5" stroke="#888" strokeWidth="1" />
+          <div className="relative mx-auto max-w-sm aspect-[5/7]">
+            <svg viewBox="0 0 100 140" className="absolute inset-0 w-full h-full">
+              {/* body outline */}
+              <path d={bodyOutline}
+                    fill="#f5f5f5"
+                    stroke="#888"
+                    strokeWidth="1" />
               
-              {/* Heart (Fire) */}
-              <ellipse 
-                cx="50" cy="35" rx="8" ry="9"
-                className={`${activeOrgan === 'heart' ? 'fill-red-300' : 'fill-red-100'} stroke-red-600 cursor-pointer transition-colors duration-300 hover:fill-red-200`}
-                onClick={() => setActiveOrgan(activeOrgan === 'heart' ? null : 'heart')}
-              />
-              <text x="50" y="35" fontSize="4" textAnchor="middle" className="pointer-events-none font-semibold">Heart</text>
-              <text x="50" y="40" fontSize="3" textAnchor="middle" className="pointer-events-none text-red-800">Fire</text>
-              
-              {/* Lung (Metal) */}
-              <ellipse 
-                cx="40" cy="33" rx="9" ry="8"
-                className={`${activeOrgan === 'lung' ? 'fill-gray-300' : 'fill-gray-100'} stroke-gray-600 cursor-pointer transition-colors duration-300 hover:fill-gray-200`}
-                onClick={() => setActiveOrgan(activeOrgan === 'lung' ? null : 'lung')}
-              />
-              <text x="40" y="33" fontSize="4" textAnchor="middle" className="pointer-events-none font-semibold">Lung</text>
-              <text x="40" y="38" fontSize="3" textAnchor="middle" className="pointer-events-none text-gray-800">Metal</text>
-              
-              {/* Liver (Wood) */}
-              <ellipse 
-                cx="60" cy="50" rx="9" ry="12"
-                className={`${activeOrgan === 'liver' ? 'fill-green-300' : 'fill-green-100'} stroke-green-600 cursor-pointer transition-colors duration-300 hover:fill-green-200`}
-                onClick={() => setActiveOrgan(activeOrgan === 'liver' ? null : 'liver')}
-              />
-              <text x="60" y="50" fontSize="4" textAnchor="middle" className="pointer-events-none font-semibold">Liver</text>
-              <text x="60" y="55" fontSize="3" textAnchor="middle" className="pointer-events-none text-green-800">Wood</text>
-              
-              {/* Spleen (Earth) */}
-              <ellipse 
-                cx="40" cy="55" rx="8" ry="10"
-                className={`${activeOrgan === 'spleen' ? 'fill-yellow-300' : 'fill-yellow-100'} stroke-yellow-600 cursor-pointer transition-colors duration-300 hover:fill-yellow-200`}
-                onClick={() => setActiveOrgan(activeOrgan === 'spleen' ? null : 'spleen')}
-              />
-              <text x="40" y="55" fontSize="4" textAnchor="middle" className="pointer-events-none font-semibold">Spleen</text>
-              <text x="40" y="60" fontSize="3" textAnchor="middle" className="pointer-events-none text-yellow-800">Earth</text>
-              
-              {/* Kidney (Water) */}
-              <ellipse 
-                cx="50" cy="80" rx="9" ry="8"
-                className={`${activeOrgan === 'kidney' ? 'fill-blue-300' : 'fill-blue-100'} stroke-blue-600 cursor-pointer transition-colors duration-300 hover:fill-blue-200`}
-                onClick={() => setActiveOrgan(activeOrgan === 'kidney' ? null : 'kidney')}
-              />
-              <text x="50" y="80" fontSize="4" textAnchor="middle" className="pointer-events-none font-semibold">Kidney</text>
-              <text x="50" y="85" fontSize="3" textAnchor="middle" className="pointer-events-none text-blue-800">Water</text>
+              {/* each organ ellipse + labels */}
+              {organs.map(o => (
+                <g key={o.id}
+                   className="cursor-pointer transition-opacity hover:opacity-80"
+                   onClick={() => setActiveOrgan(activeOrgan === o.id ? null : o.id)}>
+                  
+                  <ellipse
+                    cx={`${50 + (o.position.startsWith('left') ? -10 : o.position.includes('right-[35%]') ? 20 : 0)}`} 
+                    // but we’ll keep your original hard‐coded shapes below for pixel precision…
+                    
+                    cx={ (() => {
+                      switch(o.id){
+                        case 'heart':  return 50;
+                        case 'lung':   return 40;
+                        case 'liver':  return 60;
+                        case 'spleen': return 40;
+                        case 'kidney': return 50;
+                        default: return 50;
+                      }
+                    })() }
+                    cy={ (() => {
+                      switch(o.id){
+                        case 'heart':  return 35;
+                        case 'lung':   return 33;
+                        case 'liver':  return 50;
+                        case 'spleen': return 55;
+                        case 'kidney': return 80;
+                        default: return 70;
+                      }
+                    })() }
+                    rx={o.id==='liver' ? 9 : 8}
+                    ry={o.id==='liver' ? 12 : 8}
+                    fill={activeOrgan===o.id ? o.color.replace('-100','-300') : o.color}
+                    stroke={o.borderColor.replace('border-','')}
+                    strokeWidth="1"
+                  />
+                  
+                  <text x={ (() => {
+                      switch(o.id){
+                        case 'heart':  return 50;
+                        case 'lung':   return 40;
+                        case 'liver':  return 60;
+                        case 'spleen': return 40;
+                        case 'kidney': return 50;
+                        default: return 50;
+                      }
+                    })() }
+                    y={ (() => {
+                      switch(o.id){
+                        case 'heart':  return 35;
+                        case 'lung':   return 33;
+                        case 'liver':  return 50;
+                        case 'spleen': return 55;
+                        case 'kidney': return 80;
+                        default: return 70;
+                      }
+                    })() }
+                    fontSize="4"
+                    textAnchor="middle"
+                    className="pointer-events-none font-semibold"
+                  >
+                    {o.name}
+                  </text>
+                  <text x={ (() => {
+                      switch(o.id){
+                        case 'heart':  return 50;
+                        case 'lung':   return 40;
+                        case 'liver':  return 60;
+                        case 'spleen': return 40;
+                        case 'kidney': return 50;
+                        default: return 50;
+                      }
+                    })() }
+                    y={ (() => {
+                      switch(o.id){
+                        case 'heart':  return 40;
+                        case 'lung':   return 38;
+                        case 'liver':  return 55;
+                        case 'spleen': return 60;
+                        case 'kidney': return 85;
+                        default: return 75;
+                      }
+                    })() }
+                    fontSize="3"
+                    textAnchor="middle"
+                    className={`pointer-events-none ${o.textColor}`}
+                  >
+                    {o.element}
+                  </text>
+                </g>
+              ))}
             </svg>
             
-            <div className="mt-4 text-center text-sm text-neutral-dark">
-              <p>Click on an organ to learn more about its functions in TCM</p>
-            </div>
+            <p className="mt-4 text-center text-gray-600 italic text-sm">
+              Click on an organ to learn more about its functions in TCM
+            </p>
           </div>
         </div>
         
-        {/* Organ details */}
+        {/* ─── Details Panel ─── */}
         <div className="w-full md:w-3/5">
           {activeOrgan ? (
-            <div className="animate-fadeIn">
-              {organs.filter(o => o.id === activeOrgan).map(organ => (
-                <div key={organ.id} className={`p-4 rounded-lg ${organ.color} border ${organ.borderColor}`}>
-                  <h3 className={`text-xl font-semibold ${organ.textColor} flex items-center`}>
-                    {organ.name} <span className={`ml-2 ${organ.elementColor} text-sm`}>({organ.element} Element)</span>
-                  </h3>
-                  
-                  <p className="mt-3 text-neutral-dark">
-                    {organ.description}
-                  </p>
-                  
-                  <div className="mt-4">
-                    <h4 className="font-medium mb-2">Primary Functions:</h4>
-                    <ul className="list-disc pl-5 space-y-1 text-neutral-dark">
-                      {organ.functions.map((func, index) => (
-                        <li key={index}>{func}</li>
-                      ))}
-                    </ul>
+            organs.filter(o => o.id === activeOrgan).map(organ => (
+              <div key={organ.id} className={`p-4 rounded-lg ${organ.color} border ${organ.borderColor} animate-fadeIn`}>
+                <h3 className={`text-xl font-semibold ${organ.textColor} flex items-center`}>
+                  {organ.name}
+                  <span className={`ml-2 ${organ.elementColor} text-sm`}>
+                    ({organ.element})
+                  </span>
+                </h3>
+                
+                <p className="mt-3 text-gray-700">{organ.description}</p>
+                
+                <div className="mt-4">
+                  <h4 className="font-medium mb-2">Primary Functions:</h4>
+                  <ul className="list-disc pl-5 space-y-1 text-gray-700">
+                    {organ.functions.map((fn, i) => <li key={i}>{fn}</li>)}
+                  </ul>
+                </div>
+                
+                <div className="mt-4">
+                  <h4 className="font-medium mb-2">Common Signs of Imbalance:</h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {organ.symptoms.map((sym, i) => (
+                      <div key={i} className="flex items-start">
+                        <Info className={`h-4 w-4 ${organ.textColor} mt-0.5 mr-2`} />
+                        <span className="text-gray-700 text-sm">{sym}</span>
+                      </div>
+                    ))}
                   </div>
+                </div>
+                
+                <div className="mt-4">
+                  <h4 className="font-medium mb-2">Meridian Pathway:</h4>
+                  <p className="text-gray-700 text-sm">{organ.meridianPath}</p>
                   
-                  <div className="mt-4">
-                    <h4 className="font-medium mb-2">Common Signs of Imbalance:</h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {organ.symptoms.map((symptom, index) => (
-                        <div 
-                          key={index} 
-                          className="flex items-start"
-                        >
-                          <Info className={`h-4 w-4 ${organ.textColor} mt-0.5 mr-2 flex-shrink-0`} />
-                          <span className="text-neutral-dark text-sm">{symptom}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <div className="mt-4">
-                    <h4 className="font-medium mb-2">Meridian Pathway:</h4>
-                    <p className="text-neutral-dark text-sm">
-                      {organ.meridianPath}
+                  <div className="mt-3 p-3 bg-white bg-opacity-50 rounded-lg text-sm">
+                    <p className="italic text-gray-700">
+                      Acupuncture and acupressure along the {organ.name} meridian 
+                      can help balance this organ system and address related symptoms.
                     </p>
-                    
-                    <div className="mt-3 p-3 bg-white bg-opacity-50 rounded-lg text-sm text-neutral-dark">
-                      <p className="italic">
-                        Acupuncture and acupressure along the {organ.name} meridian can help balance this organ system and address related symptoms.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="p-4 bg-neutral rounded-lg">
-              <h3 className="text-lg font-semibold text-primary mb-4">Understanding TCM Organ Systems</h3>
-              <p className="text-neutral-dark mb-4">
-                In Traditional Chinese Medicine, organs are understood as functional systems rather than just anatomical structures. Each organ system encompasses physical, emotional, and energetic aspects that extend beyond Western medical definitions.
-              </p>
-              
-              <div className="space-y-3">
-                <div className="flex items-start">
-                  <div className="h-6 w-6 rounded-full bg-green-100 border border-green-600 flex-shrink-0 flex items-center justify-center">
-                    <span className="text-green-800 text-xs font-bold">W</span>
-                  </div>
-                  <div className="ml-3">
-                    <h4 className="font-medium text-green-800">Liver (Wood)</h4>
-                    <p className="text-sm text-neutral-dark">Ensures smooth flow of Qi and emotions; governs tendons and eyes</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
-                  <div className="h-6 w-6 rounded-full bg-red-100 border border-red-600 flex-shrink-0 flex items-center justify-center">
-                    <span className="text-red-800 text-xs font-bold">F</span>
-                  </div>
-                  <div className="ml-3">
-                    <h4 className="font-medium text-red-800">Heart (Fire)</h4>
-                    <p className="text-sm text-neutral-dark">Houses the spirit (Shen); governs blood and consciousness</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
-                  <div className="h-6 w-6 rounded-full bg-yellow-100 border border-yellow-600 flex-shrink-0 flex items-center justify-center">
-                    <span className="text-yellow-800 text-xs font-bold">E</span>
-                  </div>
-                  <div className="ml-3">
-                    <h4 className="font-medium text-yellow-800">Spleen (Earth)</h4>
-                    <p className="text-sm text-neutral-dark">Transforms food into energy; governs muscles and thinking</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
-                  <div className="h-6 w-6 rounded-full bg-gray-100 border border-gray-600 flex-shrink-0 flex items-center justify-center">
-                    <span className="text-gray-800 text-xs font-bold">M</span>
-                  </div>
-                  <div className="ml-3">
-                    <h4 className="font-medium text-gray-800">Lung (Metal)</h4>
-                    <p className="text-sm text-neutral-dark">Controls Qi and respiration; governs skin and immunity</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
-                  <div className="h-6 w-6 rounded-full bg-blue-100 border border-blue-600 flex-shrink-0 flex items-center justify-center">
-                    <span className="text-blue-800 text-xs font-bold">Wa</span>
-                  </div>
-                  <div className="ml-3">
-                    <h4 className="font-medium text-blue-800">Kidney (Water)</h4>
-                    <p className="text-sm text-neutral-dark">Stores essence (Jing); governs development and aging</p>
                   </div>
                 </div>
               </div>
+            ))
+          ) : (
+            <div className="p-4 bg-neutral rounded-lg animate-fadeIn">
+              <h3 className="text-lg font-semibold text-primary mb-4">
+                Understanding TCM Organ Systems
+              </h3>
+              <p className="text-neutral-dark mb-4">
+                In Traditional Chinese Medicine, organs are understood as functional 
+                systems rather than just anatomical structures. Each organ system 
+                encompasses physical, emotional, and energetic aspects that extend 
+                beyond Western medical definitions.
+              </p>
               
-              <div className="mt-6 p-3 bg-white rounded-lg text-sm">
-                <p className="italic text-neutral-dark">
-                  Each organ system is paired with a related organ of similar element (e.g., Liver with Gallbladder), follows specific meridian pathways in the body, and influences particular emotions and tissues.
-                </p>
+              <div className="space-y-3">
+                {organs.map(o => (
+                  <div key={o.id} className="flex items-start">
+                    <div className={`
+                      h-6 w-6 rounded-full flex-shrink-0 flex items-center justify-center 
+                      bg-${o.color.slice(3)} border ${o.borderColor}`}>
+                      <span className={`text-${o.textColor.slice(5)} text-xs font-bold`}>
+                        {o.id==='kidney'?'Wa': o.id.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                    <div className="ml-3">
+                      <h4 className={`font-medium ${o.textColor}`}>{o.name} ({o.element})</h4>
+                      <p className="text-sm text-neutral-dark">
+                        {o.description.split(';')[0]}{/* short summary */}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="mt-6 p-3 bg-white rounded-lg text-sm italic">
+                Each organ system is paired with a related organ of similar element, 
+                follows specific meridian pathways in the body, and influences particular 
+                emotions and tissues.
               </div>
             </div>
           )}
