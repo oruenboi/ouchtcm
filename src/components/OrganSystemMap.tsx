@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import { Info } from 'lucide-react';
-import { UserIcon } from '@heroicons/react/outline';
+// Heroicons v2 import:
+import { UserIcon } from '@heroicons/react/24/outline';
 
 interface Organ {
   id: string;
@@ -218,7 +219,7 @@ const OrganSystemMap: React.FC = () => {
             })}
           </div>
 
-          <p className="mt-4 text-center text-gray-600 italic text-sm">
+          <p className="mt-4 text-center text-neutral-dark italic text-sm">
             Click on an organ to learn more about its functions in TCM
           </p>
         </div>
@@ -299,9 +300,9 @@ const OrganSystemMap: React.FC = () => {
                     </p>
                     <div className="mt-3 p-3 bg-white bg-opacity-50 rounded-lg text-sm text-neutral-dark">
                       <p className="italic">
-                        Acupressure along the {organ.name} meridian
-                        can help balance this organ system and
-                        address related symptoms.
+                        Acupressure along the {organ.name} meridian can
+                        help balance this organ system and address related
+                        symptoms.
                       </p>
                     </div>
                   </div>
@@ -313,12 +314,11 @@ const OrganSystemMap: React.FC = () => {
                 Understanding TCM Organ Systems
               </h3>
               <p className="text-neutral-dark mb-4">
-                In Traditional Chinese Medicine, organs are
-                understood as functional systems rather than just
-                anatomical structures. Each organ system
-                encompasses physical, emotional, and energetic
-                aspects that extend beyond Western medical
-                definitions.
+                In Traditional Chinese Medicine, organs are understood
+                as functional systems rather than just anatomical
+                structures. Each organ system encompasses physical,
+                emotional, and energetic aspects that extend beyond
+                Western medical definitions.
               </p>
 
               <div className="space-y-3">
@@ -327,48 +327,3 @@ const OrganSystemMap: React.FC = () => {
                     <div
                       className={classNames(
                         'h-6 w-6 rounded-full flex-shrink-0 flex items-center justify-center',
-                        o.color,
-                        o.borderColor
-                      )}
-                    >
-                      <span
-                        className={classNames(
-                          'text-xs font-bold',
-                          o.textColor
-                        )}
-                      >
-                        {o.id === 'kidney' ? 'Wa' : o.name.charAt(0)}
-                      </span>
-                    </div>
-                    <div className="ml-3">
-                      <h4
-                        className={classNames(
-                          'font-medium',
-                          o.textColor
-                        )}
-                      >
-                        {o.name} ({o.element})
-                      </h4>
-                      <p className="text-sm text-neutral-dark">
-                        {o.description.split('.')[0]}.
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-6 p-3 bg-white rounded-lg text-sm italic">
-                Each organ system is paired with a related organ of
-                similar element, follows specific meridian pathways
-                in the body, and influences particular emotions and
-                tissues.
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default OrganSystemMap;
