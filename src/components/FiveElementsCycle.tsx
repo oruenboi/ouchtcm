@@ -1,5 +1,3 @@
-// src/components/FiveElementsCycle.tsx
-
 import React, { useState, useMemo } from 'react';
 
 function classNames(...classes: (string | false | null | undefined)[]) {
@@ -111,7 +109,7 @@ const FiveElementsCycle: React.FC = () => {
       <div className="flex flex-col md:flex-row gap-6">
         {/* Diagram Column */}
         <div className="w-full md:w-3/5">
-          {/* THIS wrapper now uses aspect-square */}
+          {/* now works as a true square */}
           <div className="relative aspect-square w-full max-w-md mx-auto">
             <svg className="absolute inset-0 w-full h-full pointer-events-none">
               <defs>
@@ -219,7 +217,9 @@ const FiveElementsCycle: React.FC = () => {
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300',
                 isAnimating && 'opacity-50 cursor-not-allowed'
               )}
-            >Show Generation Cycle</button>
+            >
+              Show Generation Cycle
+            </button>
             <button
               onClick={() => demonstrateCycle('control')}
               disabled={isAnimating}
@@ -230,7 +230,9 @@ const FiveElementsCycle: React.FC = () => {
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300',
                 isAnimating && 'opacity-50 cursor-not-allowed'
               )}
-            >Show Control Cycle</button>
+            >
+              Show Control Cycle
+            </button>
           </div>
         </div>
 
