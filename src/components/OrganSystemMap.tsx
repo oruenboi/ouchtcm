@@ -1,39 +1,174 @@
-// /home/project/src/components/OrganSystemMap.tsx
-import React, { useState } from 'react';
-import { Info } from 'lucide-react';
+// src/components/OrganSystemMap.tsx
+import React, { useState } from 'react'
+import { Info } from 'lucide-react'
 
 interface Organ {
-  id: string;
-  name: string;
-  element: string;
-  elementColor: string;
-  color: string;
-  borderColor: string;
-  textColor: string;
-  description: string;
-  functions: string[];
-  symptoms: string[];
-  meridianPath: string;
+  id: string
+  name: string
+  element: string
+  elementColor: string
+  color: string
+  borderColor: string
+  textColor: string
+  description: string
+  functions: string[]
+  symptoms: string[]
+  meridianPath: string
 }
 
 const organs: Organ[] = [
-  /* … your existing organ data … */
-];
+  {
+    id: 'liver',
+    name: 'Liver',
+    element: 'Wood',
+    elementColor: 'text-green-600',
+    color: 'bg-green-100',
+    borderColor: 'border-green-600',
+    textColor: 'text-green-800',
+    description:
+      'Regulates the smooth flow of qi and blood, stores blood, and governs tendons and eyes.',
+    functions: [
+      'Ensures smooth flow of Qi throughout the body',
+      'Stores blood when body is at rest',
+      'Controls the tendons and manifests in the nails',
+      'Opens into the eyes and affects vision',
+      'Houses the Hun (ethereal soul) and influences planning',
+    ],
+    symptoms: [
+      'Eye problems (blurry vision, dry eyes)',
+      'Tendon or ligament issues',
+      'Irregular menstruation',
+      'Irritability or anger',
+      'Brittle nails',
+    ],
+    meridianPath:
+      'Begins at the big toe, runs up the inner leg, through the genitals, up the torso through the liver, and ends at the chest',
+  },
+  {
+    id: 'heart',
+    name: 'Heart',
+    element: 'Fire',
+    elementColor: 'text-red-600',
+    color: 'bg-red-100',
+    borderColor: 'border-red-600',
+    textColor: 'text-red-800',
+    description:
+      'Governs blood and circulation, houses the shen (spirit/mind), and manifests in the face.',
+    functions: [
+      'Controls blood and blood vessels',
+      'Houses the Shen (spirit/consciousness)',
+      'Manifests in the complexion',
+      'Opens into the tongue and affects speech',
+      'Controls sweating as the fluid of the Heart',
+    ],
+    symptoms: [
+      'Palpitations or irregular heartbeat',
+      'Insomnia or dream-disturbed sleep',
+      'Mental restlessness',
+      'Memory issues',
+      'Speech problems',
+    ],
+    meridianPath:
+      'Begins in the heart, flows through the lungs, runs down the inner arm, and ends at the tip of the little finger',
+  },
+  {
+    id: 'spleen',
+    name: 'Spleen',
+    element: 'Earth',
+    elementColor: 'text-yellow-600',
+    color: 'bg-yellow-100',
+    borderColor: 'border-yellow-600',
+    textColor: 'text-yellow-800',
+    description:
+      'Transforms and transports nutrients, governs muscles and limbs, and keeps blood in vessels.',
+    functions: [
+      'Transforms food into Qi and Blood',
+      'Controls blood by keeping it in the vessels',
+      'Controls muscles and the four limbs',
+      'Opens into the mouth and manifests in the lips',
+      'Houses thought and is affected by overthinking',
+    ],
+    symptoms: [
+      'Digestive issues (bloating, loose stools)',
+      'Fatigue after eating',
+      'Muscle weakness',
+      'Worry or overthinking',
+      'Bruising easily',
+    ],
+    meridianPath:
+      'Begins at the tip of the big toe, runs up the inner leg, through the abdomen and spleen, and ends at the side of the chest',
+  },
+  {
+    id: 'lung',
+    name: 'Lung',
+    element: 'Metal',
+    elementColor: 'text-gray-600',
+    color: 'bg-gray-100',
+    borderColor: 'border-gray-600',
+    textColor: 'text-gray-800',
+    description:
+      'Governs qi and respiration, regulates water passages, and controls skin and body hair.',
+    functions: [
+      'Controls breathing and the intake of Qi',
+      'Regulates water passages and disperses fluids',
+      'Controls skin and body hair - defensive Qi',
+      'Opens into the nose and affects sense of smell',
+      'Influenced by and stores the emotion of grief',
+    ],
+    symptoms: [
+      'Respiratory issues (cough, asthma)',
+      'Skin problems (dryness, rashes)',
+      'Weak immunity',
+      'Grief or sadness',
+      'Nasal congestion',
+    ],
+    meridianPath:
+      'Begins in the middle of the chest, runs up to the throat, and flows down the outer arm to end at the thumb',
+  },
+  {
+    id: 'kidney',
+    name: 'Kidney',
+    element: 'Water',
+    elementColor: 'text-blue-600',
+    color: 'bg-blue-100',
+    borderColor: 'border-blue-600',
+    textColor: 'text-blue-800',
+    description:
+      'Stores essence, governs reproduction and development, and controls bones and head hair.',
+    functions: [
+      'Stores Jing (essence) and governs birth, growth, and reproduction',
+      'Controls water metabolism and filtration',
+      'Grasps Qi from the Lung for normal breathing',
+      'Produces marrow, fills the brain, and controls bones',
+      'Opens into the ears and manifests in head hair',
+    ],
+    symptoms: [
+      'Lower back pain',
+      'Urinary problems',
+      'Hearing loss or tinnitus',
+      'Premature aging (gray hair, weak bones)',
+      'Reproductive issues',
+    ],
+    meridianPath:
+      'Begins at the sole of the foot, runs along the inner leg through the kidneys, and ends at the chest',
+  },
+]
 
+// approximate anatomical % positions:
 const positions: Record<string, { top: string; left: string }> = {
   lung:   { top: '28%', left: '45%' },
   heart:  { top: '36%', left: '50%' },
   liver:  { top: '48%', left: '55%' },
   spleen: { top: '48%', left: '40%' },
   kidney: { top: '66%', left: '52%' },
-};
+}
 
 function classNames(...classes: (string | false | null | undefined)[]) {
-  return classes.filter(Boolean).join(' ');
+  return classes.filter(Boolean).join(' ')
 }
 
 const OrganSystemMap: React.FC = () => {
-  const [activeOrgan, setActiveOrgan] = useState<string | null>(null);
+  const [activeOrgan, setActiveOrgan] = useState<string | null>(null)
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6 mb-10">
@@ -42,35 +177,35 @@ const OrganSystemMap: React.FC = () => {
       </h2>
 
       <div className="flex flex-col md:flex-row gap-6">
-        {/* ── Left: Stylised “rings” + organ buttons ── */}
+        {/* ── Left: “rings” & organ buttons ── */}
         <div className="w-full md:w-2/5">
           <div className="relative mx-auto max-w-sm aspect-[5/7]">
-
-            {/* Head/shoulders ring */}
-            <div className="absolute inset-0 flex items-start justify-center pt-4">
-              <div className="w-32 h-32 border-8 border-gray-200 rounded-full"></div>
+            {/* head/shoulders */}
+            <div className="absolute inset-0 flex items-start justify-center pt-4 z-0">
+              <div className="w-32 h-32 border-8 border-gray-200 rounded-full" />
             </div>
 
-            {/* Torso ring */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-48 h-48 border-8 border-gray-200 rounded-full"></div>
+            {/* upper torso */}
+            <div className="absolute inset-0 flex items-center justify-center z-0">
+              <div className="w-48 h-48 border-8 border-gray-200 rounded-full" />
             </div>
 
-            {/* Lower‐body semicircle */}
-            <div className="absolute inset-0 flex items-end justify-center pb-4">
-              <div className="w-64 h-36 border-t-8 border-l-8 border-r-8 border-gray-200 rounded-t-full"></div>
+            {/* lower semicircle */}
+            <div className="absolute inset-0 flex items-end justify-center pb-4 z-0">
+              <div className="w-64 h-36 border-t-8 border-l-8 border-r-8 border-gray-200 rounded-t-full" />
             </div>
 
-            {/* Organ markers */}
+            {/* organ markers (now on top!) */}
             {organs.map(o => {
-              const pos = positions[o.id];
-              const isActive = activeOrgan === o.id;
+              const pos = positions[o.id]
+              const isActive = activeOrgan === o.id
+
               return (
                 <button
                   key={o.id}
                   onClick={() => setActiveOrgan(isActive ? null : o.id)}
                   className={classNames(
-                    'absolute w-14 h-14 rounded-full flex items-center justify-center cursor-pointer transition-transform',
+                    'absolute w-14 h-14 rounded-full flex items-center justify-center cursor-pointer transition-transform z-10',
                     o.color,
                     o.borderColor,
                     o.textColor,
@@ -87,9 +222,8 @@ const OrganSystemMap: React.FC = () => {
                 >
                   <span className="font-semibold text-sm">{o.name}</span>
                 </button>
-              );
+              )
             })}
-
           </div>
 
           <p className="mt-4 text-center text-neutral-dark italic text-sm">
@@ -97,7 +231,7 @@ const OrganSystemMap: React.FC = () => {
           </p>
         </div>
 
-        {/* ── Right: Details Panel ── */}
+        {/* ── Right: details panel ── */}
         <div className="w-full md:w-3/5">
           {activeOrgan ? (
             organs
@@ -131,7 +265,9 @@ const OrganSystemMap: React.FC = () => {
                   <p className="mt-3 text-neutral-dark">{org.description}</p>
 
                   <div className="mt-4">
-                    <h4 className="font-medium mb-2">Primary Functions:</h4>
+                    <h4 className="font-medium mb-2">
+                      Primary Functions:
+                    </h4>
                     <ul className="list-disc pl-5 space-y-1 text-neutral-dark">
                       {org.functions.map((fn, i) => (
                         <li key={i}>{fn}</li>
@@ -140,7 +276,9 @@ const OrganSystemMap: React.FC = () => {
                   </div>
 
                   <div className="mt-4">
-                    <h4 className="font-medium mb-2">Common Signs of Imbalance:</h4>
+                    <h4 className="font-medium mb-2">
+                      Common Signs of Imbalance:
+                    </h4>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {org.symptoms.map((sym, i) => (
                         <div key={i} className="flex items-start">
@@ -150,18 +288,25 @@ const OrganSystemMap: React.FC = () => {
                               org.textColor
                             )}
                           />
-                          <span className="text-neutral-dark text-sm">{sym}</span>
+                          <span className="text-neutral-dark text-sm">
+                            {sym}
+                          </span>
                         </div>
                       ))}
                     </div>
                   </div>
 
                   <div className="mt-4">
-                    <h4 className="font-medium mb-2">Meridian Pathway:</h4>
-                    <p className="text-neutral-dark text-sm">{org.meridianPath}</p>
+                    <h4 className="font-medium mb-2">
+                      Meridian Pathway:
+                    </h4>
+                    <p className="text-neutral-dark text-sm">
+                      {org.meridianPath}
+                    </p>
                     <div className="mt-3 p-3 bg-white bg-opacity-50 rounded-lg text-sm text-neutral-dark">
                       <p className="italic">
-                        Acupressure along the {org.name} meridian can help balance this organ system and address related symptoms.
+                        Acupressure along the {org.name} meridian can help
+                        balance this organ system and address related symptoms.
                       </p>
                     </div>
                   </div>
@@ -173,7 +318,11 @@ const OrganSystemMap: React.FC = () => {
                 Understanding TCM Organ Systems
               </h3>
               <p className="text-neutral-dark mb-4">
-                In Traditional Chinese Medicine, organs are understood as functional systems rather than just anatomical structures. Each organ system encompasses physical, emotional, and energetic aspects that extend beyond Western medical definitions.
+                In Traditional Chinese Medicine, organs are understood as
+                functional systems rather than just anatomical structures.
+                Each organ system encompasses physical, emotional, and
+                energetic aspects that extend beyond Western medical
+                definitions.
               </p>
 
               <div className="space-y-3">
@@ -186,29 +335,43 @@ const OrganSystemMap: React.FC = () => {
                         o.borderColor
                       )}
                     >
-                      <span className={classNames('text-xs font-bold', o.textColor)}>
+                      <span
+                        className={classNames(
+                          'text-xs font-bold',
+                          o.textColor
+                        )}
+                      >
                         {o.id === 'kidney' ? 'Wa' : o.name.charAt(0)}
                       </span>
                     </div>
                     <div className="ml-3">
-                      <h4 className={classNames('font-medium', o.textColor)}>
+                      <h4
+                        className={classNames(
+                          'font-medium',
+                          o.textColor
+                        )}
+                      >
                         {o.name} ({o.element})
                       </h4>
-                      <p className="text-sm text-neutral-dark">{o.description.split('.')[0]}.</p>
+                      <p className="text-sm text-neutral-dark">
+                        {o.description.split('.')[0]}.
+                      </p>
                     </div>
                   </div>
                 ))}
               </div>
 
               <div className="mt-6 p-3 bg-white rounded-lg text-sm italic">
-                Each organ system is paired with a related organ of similar element, follows specific meridian pathways in the body, and influences particular emotions and tissues.
+                Each organ system is paired with a related organ of similar
+                element, follows specific meridian pathways in the body, and
+                influences particular emotions and tissues.
               </div>
             </div>
           )}
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default OrganSystemMap;
+export default OrganSystemMap
