@@ -23,12 +23,11 @@ interface ElementData {
 }
 
 const elements: ElementData[] = [
-  { id: 'wood',  name: 'Wood',  chineseName: '木 (Mù)', color: 'bg-green-500',  hoverColor: 'hover:bg-green-600',  borderColor: 'border-green-600',  textColor: 'text-green-800',  x: 0.50, y: 0.15, organ: 'Liver',  trait: 'Growth & Flexibility',    emotion: 'Anger', season: 'Spring' },
-  { id: 'fire',  name: 'Fire',  chineseName: '火 (Huǒ)', color: 'bg-red-500',    hoverColor: 'hover:bg-red-600',    borderColor: 'border-red-600',    textColor: 'text-red-800',    x: 0.85, y: 0.35, organ: 'Heart',  trait: 'Warmth & Transformation',  emotion: 'Joy',   season: 'Summer' },
-  { id: 'earth', name: 'Earth', chineseName: '土 (Tǔ)', color: 'bg-yellow-500', hoverColor: 'hover:bg-yellow-600', borderColor: 'border-yellow-600', textColor: 'text-yellow-800', x: 0.75, y: 0.85, organ: 'Spleen', trait: 'Nourishment & Stability', emotion: 'Worry', season: 'Late Summer' },
-  // ← corrected Metal position here to y: 0.35
-  { id: 'metal', name: 'Metal', chineseName: '金 (Jīn)', color: 'bg-gray-400',  hoverColor: 'hover:bg-gray-500',  borderColor: 'border-gray-600',   textColor: 'text-gray-800',   x: 0.15, y: 0.35, organ: 'Lung',   trait: 'Purification & Structure', emotion: 'Grief',  season: 'Autumn' },
-  { id: 'water', name: 'Water', chineseName: '水 (Shuǐ)',color: 'bg-blue-500',   hoverColor: 'hover:bg-blue-600',   borderColor: 'border-blue-600',   textColor: 'text-blue-800',   x: 0.25, y: 0.85, organ: 'Kidney',trait: 'Flow & Conservation',      emotion: 'Fear',   season: 'Winter' },
+  { id: 'wood',  name: 'Wood',  chineseName: '木 (Mù)', color: 'bg-green-500',  hoverColor: 'hover:bg-green-600',  borderColor: 'border-green-600',  textColor: 'text-green-800',  x:0.50, y:0.15, organ:'Liver',  trait:'Growth & Flexibility',    emotion:'Anger', season:'Spring' },
+  { id: 'fire',  name: 'Fire',  chineseName: '火 (Huǒ)', color: 'bg-red-500',    hoverColor: 'hover:bg-red-600',    borderColor: 'border-red-600',    textColor: 'text-red-800',    x:0.85, y:0.35, organ:'Heart',  trait:'Warmth & Transformation',  emotion:'Joy',   season:'Summer' },
+  { id: 'earth', name: 'Earth', chineseName: '土 (Tǔ)', color: 'bg-yellow-500', hoverColor: 'hover:bg-yellow-600', borderColor: 'border-yellow-600', textColor: 'text-yellow-800', x:0.75, y:0.85, organ:'Spleen', trait:'Nourishment & Stability', emotion:'Worry', season:'Late Summer' },
+  { id: 'metal', name: 'Metal', chineseName: '金 (Jīn)', color: 'bg-gray-400',  hoverColor: 'hover:bg-gray-500',  borderColor: 'border-gray-600',   textColor: 'text-gray-800',   x:0.15, y:0.35, organ:'Lung',   trait:'Purification & Structure', emotion:'Grief',  season:'Autumn' },
+  { id: 'water', name: 'Water', chineseName: '水 (Shuǐ)',color: 'bg-blue-500',   hoverColor: 'hover:bg-blue-600',   borderColor: 'border-blue-600',   textColor: 'text-blue-800',   x:0.25, y:0.85, organ:'Kidney',trait:'Flow & Conservation',     emotion:'Fear',   season:'Winter' },
 ];
 
 const relationships = {
@@ -50,8 +49,8 @@ const relationships = {
 
 const FiveElementsCycle: React.FC = () => {
   const [activeElement, setActiveElement] = useState<string | null>(null);
-  const [activeCycle, setActiveCycle]     = useState<'generation' | 'control' | null>(null);
-  const [isAnimating, setIsAnimating]     = useState(false);
+  const [activeCycle,   setActiveCycle]   = useState<'generation' | 'control' | null>(null);
+  const [isAnimating,   setIsAnimating]   = useState(false);
 
   const activeRelationships = useMemo(() => {
     if (activeCycle) return relationships[activeCycle];
@@ -112,7 +111,8 @@ const FiveElementsCycle: React.FC = () => {
       <div className="flex flex-col md:flex-row gap-6">
         {/* Diagram Column */}
         <div className="w-full md:w-3/5">
-          <div className="relative w-full max-w-md mx-auto h-0 pb-[100%]">
+          {/* THIS wrapper now uses aspect-square */}
+          <div className="relative aspect-square w-full max-w-md mx-auto">
             <svg className="absolute inset-0 w-full h-full pointer-events-none">
               <defs>
                 <marker id="arrow-generation" markerUnits="strokeWidth"
@@ -168,10 +168,9 @@ const FiveElementsCycle: React.FC = () => {
                 const x1 = fromEl.x * 100, y1 = fromEl.y * 100;
                 const x2 = toEl.x   * 100, y2 = toEl.y   * 100;
                 const type = getRelationshipType(rel.from, rel.to);
-                const strokeClass =
-                  type === 'generation'
-                    ? fromEl.color.replace('bg-','stroke-').replace('500','700')
-                    : 'stroke-purple-700';
+                const strokeClass = type === 'generation'
+                  ? fromEl.color.replace('bg-','stroke-').replace('500','700')
+                  : 'stroke-purple-700';
 
                 return (
                   <line
@@ -221,7 +220,6 @@ const FiveElementsCycle: React.FC = () => {
                 isAnimating && 'opacity-50 cursor-not-allowed'
               )}
             >Show Generation Cycle</button>
-
             <button
               onClick={() => demonstrateCycle('control')}
               disabled={isAnimating}
@@ -243,20 +241,17 @@ const FiveElementsCycle: React.FC = () => {
               <div key={el.id} className={classNames('p-4 rounded-lg h-full border animate-fadeIn', el.borderColor)}>
                 <h3 className={classNames('text-lg font-semibold', el.textColor)}>{el.name} Element</h3>
                 <p className="text-sm text-gray-600">{el.chineseName}</p>
-
                 <div className="mt-4 space-y-2 text-gray-800">
                   <div><strong>Organ:</strong> {el.organ}</div>
                   <div><strong>Trait:</strong> {el.trait}</div>
                   <div><strong>Emotion:</strong> {el.emotion}</div>
                   <div><strong>Season:</strong> {el.season}</div>
                 </div>
-
                 <div className="mt-6">
                   <h4 className="font-medium mb-2">Active Relationships:</h4>
                   <ul className="text-sm space-y-2">
                     {relationships.generation.filter(r => r.from===el.id||r.to===el.id).map((r,i) => {
-                      const other = elements.find(o=>o.id=== (r.from===el.id? r.to: r.from));
-                      if(!other) return null;
+                      const other = elements.find(o=>o.id===(r.from===el.id? r.to: r.from)); if(!other) return null;
                       const isFrom = r.from===el.id;
                       return (
                         <li key={i} className="flex items-center">
@@ -269,8 +264,7 @@ const FiveElementsCycle: React.FC = () => {
                       );
                     })}
                     {relationships.control.filter(r => r.from===el.id||r.to===el.id).map((r,i) => {
-                      const other = elements.find(o=>o.id=== (r.from===el.id? r.to: r.from));
-                      if(!other) return null;
+                      const other = elements.find(o=>o.id===(r.from===el.id? r.to: r.from)); if(!other) return null;
                       const isFrom = r.from===el.id;
                       return (
                         <li key={i} className="flex items-center">
