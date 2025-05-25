@@ -14,8 +14,8 @@ interface ElementData {
   hoverColor: string;
   borderColor: string;
   textColor: string;
-  x: number;    // 0…1
-  y: number;    // 0…1
+  x: number;    // fraction 0…1
+  y: number;    // fraction 0…1
   organ: string;
   trait: string;
   emotion: string;
@@ -23,11 +23,12 @@ interface ElementData {
 }
 
 const elements: ElementData[] = [
-  { id: 'wood',  name: 'Wood',  chineseName: '木 (Mù)', color: 'bg-green-500', hoverColor: 'hover:bg-green-600', borderColor: 'border-green-600', textColor: 'text-green-800', x:0.50, y:0.15, organ:'Liver', trait:'Growth & Flexibility', emotion:'Anger',   season:'Spring' },
-  { id: 'fire',  name: 'Fire',  chineseName: '火 (Huǒ)', color: 'bg-red-500',   hoverColor: 'hover:bg-red-600',   borderColor: 'border-red-600',   textColor: 'text-red-800',   x:0.85, y:0.35, organ:'Heart', trait:'Warmth & Transformation', emotion:'Joy',    season:'Summer' },
-  { id: 'earth', name: 'Earth', chineseName: '土 (Tǔ)', color: 'bg-yellow-500',hoverColor: 'hover:bg-yellow-600',borderColor: 'border-yellow-600',textColor: 'text-yellow-800',x:0.75, y:0.85,organ:'Spleen', trait:'Nourishment & Stability', emotion:'Worry',  season:'Late Summer' },
-  { id: 'metal', name: 'Metal', chineseName: '金 (Jīn)', color: 'bg-gray-400', hoverColor: 'hover:bg-gray-500', borderColor: 'border-gray-600',  textColor: 'text-gray-800',  x:0.15, y:0.65,organ:'Lung',  trait:'Purification & Structure', emotion:'Grief',  season:'Autumn' },
-  { id: 'water', name: 'Water', chineseName: '水 (Shuǐ)',color: 'bg-blue-500', hoverColor: 'hover:bg-blue-600', borderColor: 'border-blue-600', textColor: 'text-blue-800', x:0.25, y:0.85,organ:'Kidney',trait:'Flow & Conservation',     emotion:'Fear',  season:'Winter' },
+  { id: 'wood',  name: 'Wood',  chineseName: '木 (Mù)', color: 'bg-green-500',  hoverColor: 'hover:bg-green-600',  borderColor: 'border-green-600',  textColor: 'text-green-800',  x: 0.50, y: 0.15, organ: 'Liver',  trait: 'Growth & Flexibility',    emotion: 'Anger', season: 'Spring' },
+  { id: 'fire',  name: 'Fire',  chineseName: '火 (Huǒ)', color: 'bg-red-500',    hoverColor: 'hover:bg-red-600',    borderColor: 'border-red-600',    textColor: 'text-red-800',    x: 0.85, y: 0.35, organ: 'Heart',  trait: 'Warmth & Transformation',  emotion: 'Joy',   season: 'Summer' },
+  { id: 'earth', name: 'Earth', chineseName: '土 (Tǔ)', color: 'bg-yellow-500', hoverColor: 'hover:bg-yellow-600', borderColor: 'border-yellow-600', textColor: 'text-yellow-800', x: 0.75, y: 0.85, organ: 'Spleen', trait: 'Nourishment & Stability', emotion: 'Worry', season: 'Late Summer' },
+  // ← corrected Metal position here to y: 0.35
+  { id: 'metal', name: 'Metal', chineseName: '金 (Jīn)', color: 'bg-gray-400',  hoverColor: 'hover:bg-gray-500',  borderColor: 'border-gray-600',   textColor: 'text-gray-800',   x: 0.15, y: 0.35, organ: 'Lung',   trait: 'Purification & Structure', emotion: 'Grief',  season: 'Autumn' },
+  { id: 'water', name: 'Water', chineseName: '水 (Shuǐ)',color: 'bg-blue-500',   hoverColor: 'hover:bg-blue-600',   borderColor: 'border-blue-600',   textColor: 'text-blue-800',   x: 0.25, y: 0.85, organ: 'Kidney',trait: 'Flow & Conservation',      emotion: 'Fear',   season: 'Winter' },
 ];
 
 const relationships = {
@@ -49,10 +50,9 @@ const relationships = {
 
 const FiveElementsCycle: React.FC = () => {
   const [activeElement, setActiveElement] = useState<string | null>(null);
-  const [activeCycle,   setActiveCycle]   = useState<'generation' | 'control' | null>(null);
-  const [isAnimating,   setIsAnimating]   = useState(false);
+  const [activeCycle, setActiveCycle]     = useState<'generation' | 'control' | null>(null);
+  const [isAnimating, setIsAnimating]     = useState(false);
 
-  // Determine which relationships to highlight
   const activeRelationships = useMemo(() => {
     if (activeCycle) return relationships[activeCycle];
     if (activeElement) {
@@ -115,44 +115,24 @@ const FiveElementsCycle: React.FC = () => {
           <div className="relative w-full max-w-md mx-auto h-0 pb-[100%]">
             <svg className="absolute inset-0 w-full h-full pointer-events-none">
               <defs>
-                <marker
-                  id="arrow-generation"
-                  markerUnits="strokeWidth"
-                  markerWidth="6"
-                  markerHeight="6"
-                  refX="5" refY="3"
-                  orient="auto"
-                >
-                  <path
-                    d="M0,0 L6,3 L0,6 Z"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1"
-                  />
+                <marker id="arrow-generation" markerUnits="strokeWidth"
+                        markerWidth="6" markerHeight="6"
+                        refX="5" refY="3" orient="auto">
+                  <path d="M0,0 L6,3 L0,6 Z"
+                        fill="none" stroke="currentColor" strokeWidth="1" />
                 </marker>
-                <marker
-                  id="arrow-control"
-                  markerUnits="strokeWidth"
-                  markerWidth="6"
-                  markerHeight="6"
-                  refX="5" refY="3"
-                  orient="auto"
-                >
-                  <path
-                    d="M0,0 L6,3 L0,6 Z"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1"
-                  />
+                <marker id="arrow-control" markerUnits="strokeWidth"
+                        markerWidth="6" markerHeight="6"
+                        refX="5" refY="3" orient="auto">
+                  <path d="M0,0 L6,3 L0,6 Z"
+                        fill="none" stroke="currentColor" strokeWidth="1" />
                 </marker>
               </defs>
 
               {/* Outer pentagon (generation) */}
               <path
                 d="M50,15 L85,35 L75,85 L25,85 L15,35 Z"
-                fill="none"
-                stroke="#4B5563"
-                strokeWidth="1"
+                fill="none" stroke="#4B5563" strokeWidth="1"
                 className={classNames(
                   'transition-opacity duration-300',
                   activeElement
@@ -167,10 +147,7 @@ const FiveElementsCycle: React.FC = () => {
               {/* Inner star (control) */}
               <path
                 d="M50,15 L75,85 L15,35 L85,35 L25,85 Z"
-                fill="none"
-                stroke="#9333EA"
-                strokeWidth="1"
-                strokeDasharray="5,5"
+                fill="none" stroke="#9333EA" strokeWidth="1" strokeDasharray="5,5"
                 className={classNames(
                   'transition-opacity duration-300',
                   activeElement
@@ -182,7 +159,7 @@ const FiveElementsCycle: React.FC = () => {
                 vectorEffect="non-scaling-stroke"
               />
 
-              {/* Active relationship arrows */}
+              {/* Active arrows */}
               {activeRelationships.map(rel => {
                 const fromEl = elements.find(e => e.id === rel.from);
                 const toEl   = elements.find(e => e.id === rel.to);
@@ -212,15 +189,13 @@ const FiveElementsCycle: React.FC = () => {
             {elements.map(el => (
               <div
                 key={el.id}
-                role="button"
-                tabIndex={0}
+                role="button" tabIndex={0}
                 aria-label={`${el.name} element, click for details`}
                 onClick={() => handleElementClick(el.id)}
                 onKeyPress={e => e.key === 'Enter' && handleElementClick(el.id)}
                 className={classNames(
                   'absolute w-16 h-16 rounded-full transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300 flex items-center justify-center text-white cursor-pointer',
-                  el.color,
-                  el.hoverColor,
+                  el.color, el.hoverColor,
                   activeElement === el.id && `ring-4 ring-offset-2 ${el.borderColor}`,
                   activeElement && activeElement !== el.id && !isRelationshipActive(activeElement, el.id)
                     ? 'opacity-40'
@@ -245,9 +220,8 @@ const FiveElementsCycle: React.FC = () => {
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300',
                 isAnimating && 'opacity-50 cursor-not-allowed'
               )}
-            >
-              Show Generation Cycle
-            </button>
+            >Show Generation Cycle</button>
+
             <button
               onClick={() => demonstrateCycle('control')}
               disabled={isAnimating}
@@ -258,81 +232,60 @@ const FiveElementsCycle: React.FC = () => {
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300',
                 isAnimating && 'opacity-50 cursor-not-allowed'
               )}
-            >
-              Show Control Cycle
-            </button>
+            >Show Control Cycle</button>
           </div>
         </div>
 
         {/* Details Column */}
         <div className="w-full md:w-2/5">
           {activeElement ? (
-            elements
-              .filter(e => e.id === activeElement)
-              .map(el => (
-                <div
-                  key={el.id}
-                  className={classNames('p-4 rounded-lg h-full border animate-fadeIn', el.borderColor)}
-                >
-                  <h3 className={classNames('text-lg font-semibold', el.textColor)}>
-                    {el.name} Element
-                  </h3>
-                  <p className="text-sm text-gray-600">{el.chineseName}</p>
+            elements.filter(e => e.id === activeElement).map(el => (
+              <div key={el.id} className={classNames('p-4 rounded-lg h-full border animate-fadeIn', el.borderColor)}>
+                <h3 className={classNames('text-lg font-semibold', el.textColor)}>{el.name} Element</h3>
+                <p className="text-sm text-gray-600">{el.chineseName}</p>
 
-                  <div className="mt-4 space-y-2 text-gray-800">
-                    <div><strong>Organ:</strong> {el.organ}</div>
-                    <div><strong>Trait:</strong> {el.trait}</div>
-                    <div><strong>Emotion:</strong> {el.emotion}</div>
-                    <div><strong>Season:</strong> {el.season}</div>
-                  </div>
-
-                  <div className="mt-6">
-                    <h4 className="font-medium mb-2">Active Relationships:</h4>
-                    <ul className="text-sm space-y-2">
-                      {relationships.generation
-                        .filter(r => r.from === el.id || r.to === el.id)
-                        .map((r, i) => {
-                          const other = elements.find(o =>
-                            o.id === (r.from === el.id ? r.to : r.from)
-                          );
-                          if (!other) return null;
-                          const isFrom = r.from === el.id;
-                          return (
-                            <li key={i} className="flex items-center">
-                              <span className={classNames('w-3 h-3 rounded-full mr-2', other.color)} />
-                              {isFrom
-                                ? <><strong className={el.textColor}>{el.name}</strong> nourishes{' '}
-                                   <strong className={other.textColor}>{other.name}</strong></>
-                                : <><strong className={other.textColor}>{other.name}</strong> nourishes{' '}
-                                   <strong className={el.textColor}>{el.name}</strong></>
-                              }
-                            </li>
-                          );
-                        })}
-                      {relationships.control
-                        .filter(r => r.from === el.id || r.to === el.id)
-                        .map((r, i) => {
-                          const other = elements.find(o =>
-                            o.id === (r.from === el.id ? r.to : r.from)
-                          );
-                          if (!other) return null;
-                          const isFrom = r.from === el.id;
-                          return (
-                            <li key={i} className="flex items-center">
-                              <span className={classNames('w-3 h-3 rounded-full mr-2', other.color)} />
-                              {isFrom
-                                ? <><strong className={el.textColor}>{el.name}</strong> controls{' '}
-                                   <strong className={other.textColor}>{other.name}</strong></>
-                                : <><strong className={other.textColor}>{other.name}</strong> controls{' '}
-                                   <strong className={el.textColor}>{el.name}</strong></>
-                              }
-                            </li>
-                          );
-                        })}
-                    </ul>
-                  </div>
+                <div className="mt-4 space-y-2 text-gray-800">
+                  <div><strong>Organ:</strong> {el.organ}</div>
+                  <div><strong>Trait:</strong> {el.trait}</div>
+                  <div><strong>Emotion:</strong> {el.emotion}</div>
+                  <div><strong>Season:</strong> {el.season}</div>
                 </div>
-              ))
+
+                <div className="mt-6">
+                  <h4 className="font-medium mb-2">Active Relationships:</h4>
+                  <ul className="text-sm space-y-2">
+                    {relationships.generation.filter(r => r.from===el.id||r.to===el.id).map((r,i) => {
+                      const other = elements.find(o=>o.id=== (r.from===el.id? r.to: r.from));
+                      if(!other) return null;
+                      const isFrom = r.from===el.id;
+                      return (
+                        <li key={i} className="flex items-center">
+                          <span className={classNames('w-3 h-3 rounded-full mr-2', other.color)} />
+                          {isFrom
+                            ? <><strong className={el.textColor}>{el.name}</strong> nourishes <strong className={other.textColor}>{other.name}</strong></>
+                            : <><strong className={other.textColor}>{other.name}</strong> nourishes <strong className={el.textColor}>{el.name}</strong></>
+                          }
+                        </li>
+                      );
+                    })}
+                    {relationships.control.filter(r => r.from===el.id||r.to===el.id).map((r,i) => {
+                      const other = elements.find(o=>o.id=== (r.from===el.id? r.to: r.from));
+                      if(!other) return null;
+                      const isFrom = r.from===el.id;
+                      return (
+                        <li key={i} className="flex items-center">
+                          <span className={classNames('w-3 h-3 rounded-full mr-2', other.color)} />
+                          {isFrom
+                            ? <><strong className={el.textColor}>{el.name}</strong> controls <strong className={other.textColor}>{other.name}</strong></>
+                            : <><strong className={other.textColor}>{other.name}</strong> controls <strong className={el.textColor}>{el.name}</strong></>
+                          }
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              </div>
+            ))
           ) : (
             <div className="p-4 bg-gray-50 rounded-lg h-full animate-fadeIn">
               <h3 className="font-semibold text-gray-900 mb-2">The Five Elements Theory</h3>
