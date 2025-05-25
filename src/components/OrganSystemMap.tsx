@@ -1,6 +1,8 @@
 // src/components/OrganSystemMap.tsx
+
 import React, { useState } from 'react';
 import { Info } from 'lucide-react';
+import { UserIcon } from '@heroicons/react/outline';
 
 interface Organ {
   id: string;
@@ -154,21 +156,18 @@ const organs: Organ[] = [
   }
 ];
 
-// SVG path for body outline
-const bodyOutline =
-  'M50,5 C40,5 30,15 30,25 C30,35 35,40 35,45 L35,60 L30,90 L35,110 L40,125 L45,130 L55,130 L60,125 L65,110 L70,90 L65,60 L65,45 C65,40 70,35 70,25 C70,15 60,5 50,5 Z';
+// Approximate anatomically‐inspired positions:
+const positions: Record<string, { top: string; left: string }> = {
+  lung:   { top: '28%', left: '45%' },
+  heart:  { top: '36%', left: '50%' },
+  liver:  { top: '48%', left: '55%' },
+  spleen: { top: '48%', left: '40%' },
+  kidney: { top: '66%', left: '52%' },
+};
 
 function classNames(...classes: (string | false | null | undefined)[]) {
   return classes.filter(Boolean).join(' ');
 }
-
-const coordsMap: Record<string, { cx: number; cy: number; rx: number; ry: number }> = {
-  heart:  { cx: 50, cy: 35, rx: 8,  ry: 9  },
-  lung:   { cx: 40, cy: 33, rx: 9,  ry: 8  },
-  liver:  { cx: 60, cy: 50, rx: 9,  ry: 12 },
-  spleen: { cx: 40, cy: 55, rx: 8,  ry: 10 },
-  kidney: { cx: 50, cy: 80, rx: 9,  ry: 8  },
-};
 
 const OrganSystemMap: React.FC = () => {
   const [activeOrgan, setActiveOrgan] = useState<string | null>(null);
@@ -180,67 +179,51 @@ const OrganSystemMap: React.FC = () => {
       </h2>
 
       <div className="flex flex-col md:flex-row gap-6">
-        {/* SVG + Organs */}
+        {/* ── Left: Silhouette + Organs ── */}
         <div className="w-full md:w-2/5">
           <div className="relative mx-auto max-w-sm aspect-[5/7]">
-            <svg viewBox="0 0 100 140" className="absolute inset-0 w-full h-full">
-              <path
-                d={bodyOutline}
-                fill="#f5f5f5"
-                stroke="#888"
-                strokeWidth="1"
-              />
+            {/* Heroicons User silhouette */}
+            <UserIcon className="absolute inset-0 w-full h-full text-gray-200" />
 
-              {organs.map(o => {
-                const { cx, cy, rx, ry } = coordsMap[o.id];
-                const isActive = activeOrgan === o.id;
-                return (
-                  <g
-                    key={o.id}
-                    className="cursor-pointer"
-                    onClick={() =>
-                      setActiveOrgan(isActive ? null : o.id)
-                    }
-                  >
-                    <ellipse
-                      cx={cx}
-                      cy={cy}
-                      rx={rx}
-                      ry={ry}
-                      fill={isActive ? o.color.replace('-100','-300') : o.color}
-                      stroke={o.borderColor.replace('border-','')}
-                      strokeWidth="1"
-                    />
-                    <text
-                      x={cx}
-                      y={cy}
-                      fontSize="4"
-                      textAnchor="middle"
-                      className="pointer-events-none font-semibold"
-                    >
-                      {o.name}
-                    </text>
-                    <text
-                      x={cx}
-                      y={cy + 5}
-                      fontSize="3"
-                      textAnchor="middle"
-                      className={`pointer-events-none ${o.textColor}`}
-                    >
-                      {o.element}
-                    </text>
-                  </g>
-                );
-              })}
-            </svg>
-
-            <p className="mt-4 text-center text-gray-600 italic text-sm">
-              Click on an organ to learn more about its functions in TCM
-            </p>
+            {organs.map(o => {
+              const pos = positions[o.id];
+              const isActive = activeOrgan === o.id;
+              return (
+                <button
+                  key={o.id}
+                  onClick={() =>
+                    setActiveOrgan(isActive ? null : o.id)
+                  }
+                  className={classNames(
+                    'absolute w-14 h-14 rounded-full flex items-center justify-center cursor-pointer transition-transform',
+                    o.color,
+                    o.borderColor,
+                    o.textColor,
+                    isActive
+                      ? 'ring-4 ring-offset-2 shadow-lg transform scale-110'
+                      : 'hover:scale-105'
+                  )}
+                  style={{
+                    top: pos.top,
+                    left: pos.left,
+                    transform: 'translate(-50%, -50%)'
+                  }}
+                  aria-pressed={isActive}
+                >
+                  <span className="font-semibold text-sm">
+                    {o.name}
+                  </span>
+                </button>
+              );
+            })}
           </div>
+
+          <p className="mt-4 text-center text-gray-600 italic text-sm">
+            Click on an organ to learn more about its functions in TCM
+          </p>
         </div>
 
-        {/* Details Panel */}
+        {/* ── Right: Details Panel ── */}
         <div className="w-full md:w-3/5">
           {activeOrgan ? (
             organs
@@ -316,9 +299,9 @@ const OrganSystemMap: React.FC = () => {
                     </p>
                     <div className="mt-3 p-3 bg-white bg-opacity-50 rounded-lg text-sm text-neutral-dark">
                       <p className="italic">
-                        Acupuncture and acupressure along the{' '}
-                        {organ.name} meridian can help balance this organ
-                        system and address related symptoms.
+                        Acupressure along the {organ.name} meridian
+                        can help balance this organ system and
+                        address related symptoms.
                       </p>
                     </div>
                   </div>
@@ -330,10 +313,11 @@ const OrganSystemMap: React.FC = () => {
                 Understanding TCM Organ Systems
               </h3>
               <p className="text-neutral-dark mb-4">
-                In Traditional Chinese Medicine, organs are understood as
-                functional systems rather than just anatomical structures.
-                Each organ system encompasses physical, emotional, and
-                energetic aspects that extend beyond Western medical
+                In Traditional Chinese Medicine, organs are
+                understood as functional systems rather than just
+                anatomical structures. Each organ system
+                encompasses physical, emotional, and energetic
+                aspects that extend beyond Western medical
                 definitions.
               </p>
 
@@ -374,9 +358,10 @@ const OrganSystemMap: React.FC = () => {
               </div>
 
               <div className="mt-6 p-3 bg-white rounded-lg text-sm italic">
-                Each organ system is paired with a related organ of similar
-                element, follows specific meridian pathways in the body,
-                and influences particular emotions and tissues.
+                Each organ system is paired with a related organ of
+                similar element, follows specific meridian pathways
+                in the body, and influences particular emotions and
+                tissues.
               </div>
             </div>
           )}
