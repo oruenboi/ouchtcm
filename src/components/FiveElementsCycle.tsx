@@ -402,6 +402,7 @@ const FiveElementsCycle: React.FC = () => {
                           );
                         })}
                     </ul>
+                  </div>
                 </div>
               ))
           ) : (
