@@ -209,7 +209,20 @@ const FiveElementsCycle: React.FC = () => {
             >
               <defs>
                 <marker
-                  id="arrowhead"
+                  id="arrow-generation"
+                  markerWidth="10"
+                  markerHeight="7"
+                  refX="9"
+                  refY="3.5"
+                  orient="auto"
+                >
+                  <polygon
+                    points="0 0, 10 3.5, 0 7"
+                    className="fill-current stroke-current"
+                  />
+                </marker>
+                <marker
+                  id="arrow-control"
                   markerWidth="10"
                   markerHeight="7"
                   refX="9"
@@ -253,14 +266,14 @@ const FiveElementsCycle: React.FC = () => {
               {/* Highlighted arrows */}
               {activeRelationships.map((rel) => {
                 const from = elements.find((e) => e.id === rel.from);
-                const to   = elements.find((e) => e.id === rel.to);
+                const to = elements.find((e) => e.id === rel.to);
                 
                 if (!from || !to) return null;
                 
                 const x1 = from.x * 100;
                 const y1 = from.y * 100;
-                const x2 = to.x   * 100;
-                const y2 = to.y   * 100;
+                const x2 = to.x * 100;
+                const y2 = to.y * 100;
                 const type = getRelationshipType(rel.from, rel.to);
                 const strokeClass =
                   type === 'generation'
@@ -275,7 +288,7 @@ const FiveElementsCycle: React.FC = () => {
                     x2={x2}
                     y2={y2}
                     strokeWidth="2"
-                    markerEnd="url(#arrowhead)"
+                    markerEnd={`url(#arrow-${type})`}
                     className={classNames(strokeClass, 'transition-opacity duration-300')}
                   />
                 );
