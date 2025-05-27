@@ -252,8 +252,11 @@ const FiveElementsCycle: React.FC = () => {
 
               {/* Highlighted arrows */}
               {activeRelationships.map((rel) => {
-                const from = elements.find((e) => e.id === rel.from)!;
-                const to   = elements.find((e) => e.id === rel.to)!;
+                const from = elements.find((e) => e.id === rel.from);
+                const to   = elements.find((e) => e.id === rel.to);
+                
+                if (!from || !to) return null;
+                
                 const x1 = from.x * 100;
                 const y1 = from.y * 100;
                 const x2 = to.x   * 100;
@@ -361,7 +364,8 @@ const FiveElementsCycle: React.FC = () => {
                         .map((r, i) => {
                           const other = elements.find(
                             (o) => o.id === (r.from === el.id ? r.to : r.from)
-                          )!;
+                          );
+                          if (!other) return null;
                           const isFrom = r.from === el.id;
                           return (
                             <li key={i} className="flex items-center">
@@ -384,7 +388,8 @@ const FiveElementsCycle: React.FC = () => {
                         .map((r, i) => {
                           const other = elements.find(
                             (o) => o.id === (r.from === el.id ? r.to : r.from)
-                          )!;
+                          );
+                          if (!other) return null;
                           const isFrom = r.from === el.id;
                           return (
                             <li key={i} className="flex items-center">
