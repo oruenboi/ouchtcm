@@ -831,7 +831,7 @@ const TcmElementsPage: React.FC = () => {
                 <li>Address common issues like headaches, eye strain, and backaches</li>
               </ul>
               <a 
-                href="https://ouch.com.sg/ecourses/" 
+                href="https://ouch.com.sg/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-accent hover:bg-accent-dark"
