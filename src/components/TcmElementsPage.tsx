@@ -1,3 +1,4 @@
+// src/components/TcmElementsPage.tsx
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
@@ -756,20 +757,14 @@ const TcmElementsPage: React.FC = () => {
                                 <h4 className={`font-semibold ${element.textColor}`}>{point.name}</h4>
                               </div>
                               <div className="p-4">
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                  <div className="md:col-span-2">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                  <div>
                                     <p className="text-neutral-dark mb-3">
                                       <span className="font-medium">Location:</span> {point.location}
                                     </p>
                                     <p className="text-neutral-dark">
                                       <span className="font-medium">Benefits:</span> {point.benefits}
                                     </p>
-                                  </div>
-                                  {/* This is a placeholder - in a real implementation, we would use specific acupoint images */}
-                                  <div className="relative h-40 bg-neutral rounded">
-                                    <div className="absolute inset-0 flex items-center justify-center text-neutral-dark text-sm">
-                                      [Acupoint Diagram]
-                                    </div>
                                   </div>
                                 </div>
                               </div>
