@@ -2,9 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { Check, ExternalLink, Info, ArrowRight, ArrowDown } from 'lucide-react';
-import FiveElementsCycle from './FiveElementsCycle';
-import OrganSystemMap from './OrganSystemMap';
-import { ErrorBoundary } from './ErrorBoundary';
 
 // TCM elements data
 const elementsData = [
@@ -386,16 +383,6 @@ const TcmElementsPage: React.FC = () => {
           <h1 className="text-3xl font-bold text-primary mb-2">Five Elements of Traditional Chinese Medicine</h1>
           <p className="text-xl text-neutral-dark">Understanding the relationships between elements, organs, and health</p>
         </div>
-        
-        {/* Five Elements Cycle Visualization */}
-        <ErrorBoundary fallback="Unable to load the Five Elements diagram. Please try refreshing the page.">
-          <FiveElementsCycle />
-        </ErrorBoundary>
-        
-        {/* Organ System Map */}
-        <ErrorBoundary fallback="Unable to load the Organ System Map. Please try refreshing the page.">
-          <OrganSystemMap />
-        </ErrorBoundary>
         
         {/* Symptom Selector */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-10">
