@@ -34,6 +34,9 @@ export default {
           dark:    '#3A3A3A',
         },
       },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+      },
       keyframes: {
         colorCycle: {
           '0%, 100%': { color: '#FFFFFF' },
@@ -56,12 +59,17 @@ export default {
           '0%':   { opacity: '0' },
           '100%': { opacity: '1' },
         },
+        'glitch-slide': {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' }
+        },
       },
       animation: {
         colorCycle:      'colorCycle 8s infinite',
         imageCycle:      'imageCycle 8s infinite',
         backgroundCycle: 'backgroundCycle 15s infinite',
         fadeIn:          'fadeIn 0.5s ease-out',
+        'glitch-slide':  'glitch-slide 3s infinite linear',
       },
     },
   },
