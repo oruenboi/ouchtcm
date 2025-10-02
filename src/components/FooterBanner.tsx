@@ -29,7 +29,7 @@ const FooterBanner = () => {
             </div>
             <span className="hidden sm:inline text-neutral-400">•</span>
             <a 
-              href="https://nexiuslabs.netlify.app/build-with-ai"
+              href="https://academy.nexiuslabs.com"
               target="_blank"
               rel="noopener noreferrer"
               className="text-accent hover:text-accent-light transition-colors flex items-center space-x-1 group text-center font-medium"
